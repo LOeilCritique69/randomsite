@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wasting Time</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="timer">30</div>
+    <video id="videoPlayer" controls autoplay></video>
+
+<script>
+    const timerElement = document.getElementById('timer');
+    const videoPlayer = document.getElementById('videoPlayer');
+
+    let countdown = 10;
+    let videos = [];
+
+    // Charger le fichier JSON
+    async function loadVideos() {
+        try {
+            const response = await fetch('data.json');
+            const data = await response.json();
+            videos = data.videos;
+
+            if (videos.length > 0) {
+                videoPlayer.src = getRandomVideo();
+            } else {
+                console.error("Aucune vidéo trouvée dans data.json");
+            }
+        } catch (error) {
+            console.error("Erreur de chargement du JSON :", error);
+        }
+    }
+
+    function getRandomVideo() {
+        const randomIndex = Math.floor(Math.random() * videos.length);
+        // encodeURI pour gérer espaces et caractères spéciaux
+        return encodeURI(videos[randomIndex]);
+    }
+
+    function changeVideo() {
+        videoPlayer.src = getRandomVideo();
+        videoPlayer.play();
+    }
+
+    // Compte à rebours
+    setInterval(() => {
+        countdown--;
+        timerElement.textContent = countdown;
+
+        if (countdown <= 0) {
+            changeVideo();
+            countdown = 13; // Reset
+        }
+    }, 1000);
+
+    // Lancer le chargement des vidéos
+    loadVideos();
+</script>
+</body>
+</html>
