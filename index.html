@@ -36,14 +36,17 @@
 
     function getRandomVideo() {
         const randomIndex = Math.floor(Math.random() * videos.length);
-        // encodeURIComponent pour gérer espaces et caractères spéciaux côté serveur
         return videos[randomIndex].split('/').map(encodeURIComponent).join('/');
     }
 
+
     function changeVideo() {
-        videoPlayer.src = getRandomVideo();
+        const videoSrc = getRandomVideo();
+        videoPlayer.src = videoSrc;
+        videoPlayer.type = "video/mp4"; // force le type MIME
         videoPlayer.play();
     }
+
 
     // Compte à rebours
     setInterval(() => {
