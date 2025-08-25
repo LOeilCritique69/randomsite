@@ -26,6 +26,8 @@
 
             if (videos.length > 0) {
                 videoPlayer.src = getRandomVideo();
+                videoPlayer.type = "video/mp4";
+                videoPlayer.play();
             } else {
                 console.error("Aucune vidéo trouvée dans data.json");
             }
@@ -36,19 +38,18 @@
 
     function getRandomVideo() {
         const randomIndex = Math.floor(Math.random() * videos.length);
+        // Encode chaque segment du chemin pour éviter les problèmes avec Netlify
         return videos[randomIndex].split('/').map(encodeURIComponent).join('/');
     }
-
 
     function changeVideo() {
         const videoSrc = getRandomVideo();
         videoPlayer.src = videoSrc;
-        videoPlayer.type = "video/mp4"; // force le type MIME
+        videoPlayer.type = "video/mp4";
         videoPlayer.play();
     }
 
-
-    // Compte à rebours
+    // Compte à rebours toutes les secondes
     setInterval(() => {
         countdown--;
         timerElement.textContent = countdown;
@@ -64,4 +65,3 @@
 </script>
 </body>
 </html>
-``

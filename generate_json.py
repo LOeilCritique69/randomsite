@@ -9,21 +9,22 @@ def safe_name(filename):
     """
     Renomme le fichier pour qu'il soit safe pour Netlify :
     - remplace les espaces par _
-    - remplace les caractères non ASCII par leurs équivalents ASCII simples
-    - supprime les caractères problématiques
+    - supprime les accents et caractères spéciaux
     """
     name, ext = os.path.splitext(filename)
-    # Normaliser les accents
-    name = name.encode("ascii", "ignore").decode()
-    # Remplacer les espaces et caractères spéciaux par _
-    name = re.sub(r'[^A-Za-z0-9_-]', '_', name)
-    return f"{video_folder}/{name}{ext}"
+    name = name.encode("ascii", "ignore").decode()   # supprimer accents
+    name = re.sub(r'[^A-Za-z0-9_-]', '_', name)     # convertir tout ce qui n'est pas safe en _
+    return f"{video_folder}/{name}{ext.lower()}"    # extension minuscule
 
-# Liste tous les fichiers mp4 et webm
-videos = [safe_name(f) for f in os.listdir(video_folder) if f.lower().endswith(('.mp4', '.webm'))]
+videos = []
+for f in os.listdir(video_folder):
+    if f.lower().endswith(('.mp4', '.webm')):
+        old_path = os.path.join(video_folder, f)
+        new_path = safe_name(f)
+        os.rename(old_path, new_path)  # renomme physiquement
+        videos.append(new_path)
 
-# Écrire dans data.json
 with open(output_file, "w", encoding="utf-8") as f:
     json.dump({"videos": videos}, f, indent=4)
 
-print(f"{len(videos)} vidéos ajoutées dans {output_file}")
+print(f"{len(videos)} vidéos ajoutées et renommées dans {output_file}")

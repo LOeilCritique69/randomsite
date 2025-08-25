@@ -1,0 +1,9 @@
+[[headers]]
+  for = "/videos/*.mp4"
+  [headers.values]
+    Content-Type = "video/mp4"
+
+[[headers]]
+  for = "/videos/*.webm"
+  [headers.values]
+    Content-Type = "video/webm"
