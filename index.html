@@ -14,7 +14,7 @@
     const timerElement = document.getElementById('timer');
     const videoPlayer = document.getElementById('videoPlayer');
 
-    let countdown = 10;
+    let countdown = 30;
     let videos = [];
 
     // Charger le fichier JSON
@@ -36,8 +36,8 @@
 
     function getRandomVideo() {
         const randomIndex = Math.floor(Math.random() * videos.length);
-        // encodeURI pour gérer espaces et caractères spéciaux
-        return encodeURI(videos[randomIndex]);
+        // encodeURIComponent pour gérer espaces et caractères spéciaux côté serveur
+        return videos[randomIndex].split('/').map(encodeURIComponent).join('/');
     }
 
     function changeVideo() {
@@ -52,7 +52,7 @@
 
         if (countdown <= 0) {
             changeVideo();
-            countdown = 13; // Reset
+            countdown = 30; // Reset
         }
     }, 1000);
 
@@ -61,3 +61,4 @@
 </script>
 </body>
 </html>
+``
